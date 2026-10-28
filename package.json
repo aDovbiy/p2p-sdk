@@ -1,0 +1,30 @@
+{
+  "name": "dmarket-p2p-sdk",
+  "version": "1.0.0-beta",
+  "private": true,
+  "description": "Headless seller client for DMarket P2P trading",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "dmarket-p2p-sdk": "dist/main.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "rm -rf dist-test && tsc -p tsconfig.json --outDir dist-test && node --test \"dist-test/**/*.test.js\""
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.5",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
+  },
+  "dependencies": {
+    "@dmarket/p2p-tracker-headless": "1.1.0-beta"
+  }
+}

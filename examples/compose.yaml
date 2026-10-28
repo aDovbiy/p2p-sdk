@@ -1,0 +1,44 @@
+# One Steam account: the SDK and a bot that share one network namespace.
+#
+# `net` owns the namespace and does nothing else. The SDK and the bot join it, so the SDK's management API on
+# 127.0.0.1:8790 is reachable from the bot and from nowhere else, and either of them can restart or crash without
+# taking the other's network with it. Nothing is published on the host.
+#
+# Next to this file:
+#   config.json   the SDK config (managementSecret, dataDir); mode 640, group 1000
+#   seller.env    SDK_MANAGEMENT_SECRET, DMARKET_PUBLIC_KEY, DMARKET_SECRET_KEY; mode 600
+#   steam/token   the Steam access token; replace the file to rotate it
+#   seller.mjs    the example seller bot; swap the `bot` service for your own
+
+services:
+  net:
+    image: registry.k8s.io/pause:3.10@sha256:ee6521f290b2168b6e0935a181d4cff9be1ac3f505666ef0e3c98fae8199917a
+    restart: unless-stopped
+
+  sdk:
+    image: ghcr.io/dmarket/p2p-sdk:1.0.0-beta
+    network_mode: "service:net"
+    restart: unless-stopped
+    mem_limit: 768m
+    environment:
+      DMARKET_SDK_CONFIG: /config/config.json
+    volumes:
+      - ./config.json:/config/config.json:ro
+      - sdk-data:/data
+
+  bot:
+    image: node:22-alpine
+    command: ["node", "/app/seller.mjs"]
+    network_mode: "service:net"
+    depends_on: [sdk]
+    restart: unless-stopped
+    env_file: seller.env
+    environment:
+      STEAM_ACCESS_TOKEN_FILE: /run/steam/token
+    volumes:
+      - ./seller.mjs:/app/seller.mjs:ro
+      # A directory, not the file: a bind-mounted file keeps the old token after the file is replaced.
+      - ./steam:/run/steam:ro
+
+volumes:
+  sdk-data:

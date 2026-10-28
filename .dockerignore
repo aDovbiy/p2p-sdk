@@ -1,0 +1,9 @@
+# Only what the build reads goes into the context.
+*
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.build.json
+!src/
+!LICENSE
+!THIRD_PARTY_NOTICES.md

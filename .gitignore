@@ -1,0 +1,22 @@
+# Node
+node_modules/
+dist/
+dist-test/
+coverage/
+*.tgz
+
+# Local config
+*.local
+
+# IDE
+.idea/
+*.iml
+.fleet/
+
+# OS
+.DS_Store
+
+# Logs / secrets
+*.log
+*.gpg
+secring.*
