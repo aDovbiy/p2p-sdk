@@ -1,6 +1,9 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 
 import { MAX_BODY_BYTES, type ApiResponse, type ManagementApi } from "./api.js";
+
+/** What the listener hands each request to: the single-account API or the multi-account one. */
+export type RequestHandler = Pick<ManagementApi, "handle">;
 import type { Log } from "./log.js";
 
 const TOO_LARGE: ApiResponse = {
@@ -21,7 +24,7 @@ export class ManagementServer {
   #server: Server | null = null;
 
   constructor(
-    private readonly api: ManagementApi,
+    private readonly api: RequestHandler,
     private readonly log: Log,
   ) {}
 
