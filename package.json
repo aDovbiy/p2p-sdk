@@ -6,7 +6,8 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "dmarket-p2p-sdk": "dist/main.js"
+    "dmarket-p2p-sdk": "dist/main.js",
+    "dmarket-p2p-sdk-multi": "dist/multi/main.js"
   },
   "engines": {
     "node": ">=22"
@@ -25,6 +26,7 @@
     "typescript-eslint": "8.72.0"
   },
   "dependencies": {
-    "@dmarket/p2p-tracker-headless": "1.1.0-beta"
+    "@dmarket/p2p-tracker-headless": "1.1.0-beta",
+    "undici": "6.29.1"
   }
 }
